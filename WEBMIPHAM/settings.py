@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-lux7f%h@h&-qlbv41*86spgz_g7+_z5=v9d^0e3zoi@mt&9&)h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 LOGIN_URL = '/login/'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['romand.onrender.com' ,'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -131,3 +131,9 @@ AUTHENTICATION_BACKENDS = [
     'quantri.backends.EmailBackend',  # Đường dẫn đến file backends.py bạn tạo
     'django.contrib.auth.backends.ModelBackend',  # Giữ lại nếu vẫn muốn login bằng username
 ]
+import dj_database_url
+DATABASES = {
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+}
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
