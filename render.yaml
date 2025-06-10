@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: romand
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn WEBMIPHAM.wsgi:application"
+    staticPublishPath: staticfiles
