@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Romand.vn</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROMAND</title>
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}"
+</head>
+<body>
+   
+    <header>
+        <a href="{% url 'index' %}" class="logo"><i class="fas-fa-untensils"></i>ROMAND</a>
+        <nav class="navbar">
+            <a href="{% url 'index' %}">Trang chủ</a>
+            <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+            <a href="{% url 'sanpham' %}">Sản phẩm</a>
+            <div class="dropdown">
+               
+                </div>
+            </div>
+            <a href="{% url 'lienhe' %}">Liên hệ</a>
+            <a href="{% url 'index' %}#review">Phản hồi</a>
+            <a href="{% url 'qa' %}">Q&A</a>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Giỏ Hàng</h5>
+                        <span class="close">&times;</span>
+                    </div>
+                    <!-- modal -->
+                    <div class="modal-body">
+                        <div class="cart-row">
+                            <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                            <span class="cart-price cart-header cart-column">Giá</span>
+                            <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                        </div>
+                        <div class="cart-items">
+                            <div class="cart-total">
+                                <strong class="cart-total-title">Tổng Cộng:</strong>
+                                <span class="cart-total-price">0 $</span>
+                            </div>
+                        </div>
+    
+    
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                            <button type="button" class="btn btn-primary order">Thanh Toán</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="icons">
+            <i class="fas fa-bars" id="menu-bars"></i>
+            <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+            <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="fas fa-user"></a>
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+            {% endif %}
+
+        </div>
+    
+    </header>
+
+<form action = "" id="search-form">
+    <input type="search" placeholder="Tìm kiếm ở đây..." name ="" id="search-box">
+    <label for="search-box" class="fas fa-search"></label>
+    <i class="fas fa-times" id="close"></i>
+</form>
+
+
+ <!-- Contact Section -->
+ <div class="contact-section" id="lienhe">
+    <div class="box1">
+    <h2>Liên hệ với chúng tôi</h2>
+    <div class="contact-info">
+        <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <p>Ngõ 12 Chùa Bộc, Đống Đa, Hà Nội, Việt Nam (trụ sở chính)</p>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-info-circle"></i>
+            <p>Cửa hàng mỹ phẩm thời trang</p>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-phone-alt"></i>
+            <p>(123) 456-7890</p>
+        </div>
+    </div>
+    </div>
+    <div class="contact-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.587038795769!2d105.82585447438657!3d21.009184588452342!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac800f450807%3A0x419a49bcd94b693a!2sBanking%20Academy!5e0!3m2!1sen!2s!4v1718365639619!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</div>
+
+    <section class="footer">
+
+        <div class="box-container">
+
+            <div class="box">
+                <h3>Các cơ sở</h3>
+                <a href="#">Đống Đa, Hà Nội</a>
+                <a href="#">Hà Đông, Hà Nội</a>
+                <a href="#">Phủ Lý, Hà Nam</a>
+                <a href="#">Tiên Lãng, Hải Phòng</a>
+                <a href="#">Quận 1, Hồ Chí Minh</a>
+            </div>
+
+            <div class="box">
+                <h3>Các mục</h3>
+                <a href="{% url 'index' %}">Trang chủ</a>
+                <a href="{% url 'sanpham' %}">Sản phẩm</a>
+                <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+                <a href="{% url 'lienhe' %}">Liên hệ</a>
+                <a href="{% url 'index' %}#review">Phản hồi</a>
+                <a href="{% url 'qa' %}">Q&A</a>
+            </div>
+
+            <div class="box">
+                <h3>Thông tin liên lạc</h3>
+                <a href="#">+124-456-7890</a>
+                <a href="#">+111-222-3333</a>
+                <a href="#">romand@gmail.com</a>
+            </div>
+
+            <div class="box">
+                <h3>Theo dõi chúng tôi</h3>
+                <a href="https://www.facebook.com/romandyou.vn"><i class="fab fa-facebook-f"></i> Facebook</a>
+                <a href="https://www.instagram.com/romand_vn/"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+
+        </div>
+
+        <div class="credit"> copyright @ 2024 by <span>nhóm 4 thiếu nữ</span></div>
+
+    </section>
+
+
+
+<!-- //Lienhe -->
+<script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const contactSection = document.getElementById('contact');
+
+        window.addEventListener('scroll', () => {
+            const sectionPosition = contactSection.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.5;
+
+            if (sectionPosition < screenPosition) {
+                contactSection.classList.add('appear');
+            }
+        });
+    });
+</script>
+<!-- // ends Lienhe  -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<!-- custom js file link -->
+<script src="{% static 'customers/js/script.js' %}"></script>
+</body>
+</html>

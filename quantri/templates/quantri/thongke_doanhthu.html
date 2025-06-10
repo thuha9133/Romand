@@ -1,0 +1,37 @@
+{% extends "quantri/base.html" %}
+{% load humanize %}
+{% block content %}
+<a href="{% url 'trang_chu' %}" style="display:inline-block; margin-bottom:20px; color:#3498db; font-weight:bold;">← Quay về Trang Chủ</a>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Thống Kê Doanh Thu</h2>
+    <div class="alert alert-info text-center">
+        <h4>Tổng Doanh Thu: {{ tong_doanhthu|floatformat:2|intcomma }} VNĐ</h4>
+    </div>
+
+    <h4 class="mt-4">Chi Tiết Doanh Thu Theo Đơn Hàng</h4>
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Mã Đơn Hàng</th>
+                <th>Ngày Đặt</th>
+                <th>Tổng Số Lượng</th>
+                <th>Doanh Thu (VNĐ)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in donhang_data %}
+            <tr>
+                <td>{{ item.don_hang__ma_dh }}</td>
+                <td>{{ item.don_hang__ngay_dat|date:"d/m/Y" }}</td>
+                <td>{{ item.tong_so_luong }}</td>
+                <td>{{ item.tong_doanhthu|floatformat:0|intcomma }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">Chưa có dữ liệu</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

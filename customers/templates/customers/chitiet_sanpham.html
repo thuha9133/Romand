@@ -1,0 +1,675 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}" />
+
+{% block content %}
+<style>
+     .search-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Icon tìm kiếm */
+#search-icon {
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2;
+    position: relative;
+}
+
+/* Form tìm kiếm ẩn mặc định */
+#search-form {
+    margin-top: 2px;
+    position: absolute;
+    top: 40px; /* nằm ngay dưới icon */
+    left: 0;
+    display: none; /* ẩn mặc định */
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 1;
+    min-width: 220px;
+}
+
+/* Khi active thì hiện */
+#search-form.active {
+    display: block;
+}
+
+/* Input tìm kiếm */
+#search-form input[type="text"] {
+    width: calc(100% - 60px);
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Nút tìm */
+#search-form button {
+    padding: 6px 10px;
+    margin-left: 5px;
+    border: none;
+    background-color: #eb689f;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    #search-form {
+    display: none;
+    /* hoặc visibility: hidden; */
+    }
+
+    #search-form.active {
+    display: block;
+    /* Hoặc kiểu hiển thị phù hợp */
+    }
+
+    /* === Modal Cart Style Update === */
+
+.modal-content {
+    max-width: 700px;
+    margin: auto;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.modal-header, .modal-footer {
+    padding: 16px 24px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header {
+    border-bottom: 2px solid #007bff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-footer {
+    border-top: 1px solid #eee;
+    background: #f9f9f9;
+}
+
+.cart-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-column {
+    flex: 1;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+}
+
+.cart-item-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    margin-right: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.cart-item-title {
+    font-weight: 500;
+    color: #333;
+}
+
+.cart-price {
+    text-align: right;
+    font-weight: 500;
+    color: #555;
+}
+
+.cart-quantity-input {
+    width: 50px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-right: 8px;
+    text-align: center;
+}
+
+.btn-danger {
+    background-color: #333;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #555;
+}
+
+.cart-total {
+    text-align: right;
+    padding: 16px 24px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #000;
+}
+
+#btn-checkout a {
+    color: white !important;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+#btn-checkout {
+    flex: 1;
+    background: #007bff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-weight: bold;
+    color: white;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+#btn-checkout:hover {
+    background-color: #0056b3;
+}
+
+.close-footer {
+    flex: 1;
+    background: #6c757d;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-weight: bold;
+    color: white;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+    margin-right: 8px;
+}
+
+.close-footer:hover {
+    background-color: #545b62;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+    }
+
+    .cart-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cart-column {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+.product-detail-container {
+    margin-top: 30px;
+    margin-bottom: 100px; /* Thêm dòng này để tránh bị footer che */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+.product-image {
+    margin-left: 190px;
+    flex: 1 1 350px;
+    max-width: 450px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Căn giữa ảnh */
+}
+
+.product-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.product-image img:hover {
+    transform: scale(1.05);
+}
+
+.product-info {
+    flex: 1 1 350px;
+    max-width: 600px;
+    background: #fafafa;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.product-info h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: rgb(228, 111, 150);
+}
+
+.product-info p {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.product-info strong {
+    color: #555;
+}
+
+.btn {
+    cursor: pointer;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 20px;
+    width: 180px;
+    font-weight: 600;
+    user-select: none;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    margin-right: 15px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+    box-shadow: 0 6px 12px rgba(108, 117, 125, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .product-detail-container {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .product-image, .product-info {
+        max-width: 100%;
+        flex: unset;
+        padding: 0 15px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .btn + .btn {
+        margin-top: 15px;
+    }
+}
+
+/* Toast style */
+#toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    border-radius: 4px;
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 16px;
+}
+
+#toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+</style>
+<body>
+    <header>
+    <a href="{% url 'index' %}" class="logo"> ROMAND</a>
+    <nav class="navbar">
+        <a href="{% url 'index' %}">Trang chủ</a>
+        <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+        <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        <a href="{% url 'lienhe' %}">Liên hệ</a>
+        <a href="{% url 'index' %}#review">Phản hồi</a>
+        <a href="{% url 'qa' %}">Q&A</a>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Giỏ Hàng</h5>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="cart-row">
+                        <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                        <span class="cart-price cart-header cart-column">Giá</span>
+                        <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                    </div>
+                    <div class="cart-items">
+                        <!-- Tạo vùng chứa danh sách sản phẩm -->
+                        <div class="cart-items-list"></div>
+
+                        <div class="cart-total">
+                            <strong class="cart-total-title">Tổng Cộng:</strong>
+                            <span class="cart-total-price">0 VNĐ</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                        <button id="btn-checkout" class="btn btn-primary"><a href="{% url 'thanhtoan' %}" class="btn btn-primary">Thanh toán</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="icons">
+        <i class="fas fa-bars" id="menu-bars"></i>
+        <div class="search-container">
+            <i class="fas fa-search" id="search-icon" onclick="toggleSearchBar()"></i>
+            <form method="GET" action="{% url 'tim_kiem_san_pham' %}" id="search-form">
+                <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." required>
+                <button type="submit">Tìm</button>
+            </form>
+        </div> 
+        <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+        <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="fas fa-user"></a>
+        {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+        {% endif %}
+
+    </div>
+</header>
+<body>
+<script>
+    const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
+</script>
+
+<button onclick="history.back()" class="btn btn-secondary" style="margin-bottom: 20px;">
+    ← Quay lại
+</button>
+
+<div class="product-detail-container">
+    <div class="product-image">
+        {% if sp.hinh_anh %}
+            <img class="img-prd" src="{{ sp.hinh_anh.url }}" alt="{{ sp.ten_san_pham }}">
+        {% else %}
+            <img class="img-prd" src="{% static 'img/no-image.png' %}" alt="Không có ảnh">
+        {% endif %}
+    </div>
+    <div class="product-info" data-product-id="{{ sp.id }}">
+        <h2 class="content-product-h3">{{ sp.ten_san_pham }}</h2>
+        <p class="price"><strong>Giá:</strong> {{ sp.gia|floatformat:0 }} VNĐ</p>
+        <p><strong>Loại sản phẩm:</strong> {{ sp.ten_loai }}</p>
+        <p><strong>Mô tả:</strong> {{ sp.mo_ta|linebreaks }}</p>
+        <p><strong>Số luọng trong kho:</strong> {{ sp.so_luong }}</p>
+        
+<button class="btn btn-primary btn-cart" style="background-color: rgb(248, 167, 194);">Thêm vào giỏ hàng</button>
+        <button class="btn btn-secondary btn-like">Yêu thích</button>
+    </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast">Đã thêm vào mục yêu thích</div>
+<script src="{% static 'js/cart.js' %}"></script>
+<script>
+        function toggleSearchBar() {
+        const form = document.getElementById('search-form');
+        form.style.display = form.style.display === 'none' ? 'inline-block' : 'none';
+    }
+    // Hiển thị modal khi click vào icon giỏ hàng
+    const cartIcon = document.getElementById("cart");
+    const modal = document.getElementById("myModal");
+    const closeModalBtns = document.querySelectorAll(".close, .close-footer");
+
+    cartIcon.addEventListener("click", () => {
+        renderCart();
+        modal.style.display = "block";
+    });
+
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+    });
+
+    function renderCart() {
+        const cartItemsContainer = document.querySelector(".cart-items-list");
+        cartItemsContainer.innerHTML = "";
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let total = 0;
+
+        cart.forEach(item => {
+            const itemDiv = document.createElement("div");
+            itemDiv.classList.add("cart-row");
+
+            itemDiv.innerHTML = `
+                <div class="cart-item cart-column">
+                    <img class="cart-item-image" src="${item.img}" width="100" height="100" alt="">
+                    <span class="cart-item-title">${item.name}</span>
+                </div>
+                <span class="cart-price cart-column">${item.price} VNĐ</span>
+                <div class="cart-quantity cart-column">
+                    <input class="cart-quantity-input" type="number" value="${item.quantity}">
+                    <button class="btn btn-danger" type="button">Xóa</button>
+                </div>
+            `;
+
+            // Xử lý xóa sản phẩm
+            itemDiv.querySelector(".btn-danger").addEventListener("click", () => {
+                removeItemFromCart(item.id);
+                renderCart();
+            });
+
+            // Xử lý thay đổi số lượng
+            itemDiv.querySelector(".cart-quantity-input").addEventListener("change", (event) => {
+                let quantity = parseInt(event.target.value);
+                if (isNaN(quantity) || quantity <= 0) {
+                    quantity = 1;
+                    event.target.value = 1;
+                }
+                updateItemQuantity(item.id, quantity);
+                renderCart();
+            });
+
+            total += item.price * item.quantity;
+            cartItemsContainer.appendChild(itemDiv);
+        });
+
+        document.querySelector(".cart-total-price").innerText = total.toLocaleString("vi-VN") + "VNĐ";
+    }
+
+    function removeItemFromCart(id) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart = cart.filter(item => item.id !== id);
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function updateItemQuantity(id, newQuantity) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const index = cart.findIndex(item => item.id === id);
+        if (index > -1) {
+            cart[index].quantity = newQuantity;
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const addCartBtn = document.querySelector(".btn-cart");
+        const likeBtn = document.querySelector(".btn-like");
+        const productBox = document.querySelector(".product-info");
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+
+        function getProductData() {
+            return {
+                id: productBox.getAttribute("data-product-id"),
+                name: productBox.querySelector(".content-product-h3").innerText,
+                price: parseInt(productBox.querySelector(".price").innerText.replace(/[^\d]/g, '')),
+                img: document.querySelector(".img-prd").src,
+                quantity: 1
+            };
+        }
+
+        addCartBtn.addEventListener("click", () => {
+            if (!isAuthenticated) {
+                window.location.href = "{% url 'login' %}?next={{ request.path }}";
+                return;
+            }
+
+            const product = getProductData();
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const index = cart.findIndex(item => item.id === product.id);
+            if (index > -1) {
+                cart[index].quantity += 1;
+            } else {
+                cart.push(product);
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+            showToast("Đã thêm vào giỏ hàng");
+        });
+
+        likeBtn.addEventListener("click", () => {
+            if (!isAuthenticated) {
+                window.location.href = "{% url 'login' %}?next={{ request.path }}";
+                return;
+            }
+
+            const product = getProductData();
+            let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+            const exists = favorites.some(item => item.id === product.id);
+            if (!exists) {
+                favorites.push(product);
+                localStorage.setItem("favorites", JSON.stringify(favorites));
+                showToast("Đã thêm vào mục yêu thích");
+            } else {
+                showToast("Sản phẩm đã có trong mục yêu thích");
+            }
+        });
+    });
+
+
+</script>
+
+
+{% endblock %}
+<section class="footer">
+
+    <div class="box-container">
+
+        <div class="box">
+            <h3>Các cơ sở</h3>
+            <a href="#">Đống Đa, Hà Nội</a>
+            <a href="#">Cầu Giấy, Hà Nội</a>
+            <a href="#">Phủ Lý, Hà Nam</a>
+            <a href="#">TP. Vinh, Nghệ An</a>
+            <a href="#">Quận 1, Hồ Chí Minh</a>
+        </div>
+
+        <div class="box">
+            <h3>Các mục</h3>
+            <a href="index.html#home">Trang chủ</a>
+            <a href="index.html#sanpham">Sản phẩm</a>
+            <a href="gioithieu.html">Giới thiệu</a>
+            <a href="lienhe.html">Liên hệ</a>
+            <a href="index.html#review">Phản hồi</a>
+            <a href="qa.html">Q&A</a>
+        </div>
+        
+        <div class="box">
+            <h3>Thông tin liên lạc</h3>
+            <a href="#">+124-456-7890</a>
+            <a href="#">+111-222-3333</a>
+            <a href="#">rhode@gmail.com</a>
+        </div>
+
+        <div class="box">
+            <h3>Theo dõi chúng tôi</h3>
+            <a href="https://www.facebook.com/ntmahn/"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="https://x.com/SenselessWillow"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="https://www.instagram.com/rhode/"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://www.linkedin.com/in/ntmahn/"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+        </div>
+
+    </div>
+
+    <div class="credit"> copyright @ 2024 by <span>nhóm 4 thiếu nữ </span></div>
+
+</section>
+</body>
+</html>

@@ -1,0 +1,517 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}"> </head>
+<style>
+    .search-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Icon tìm kiếm */
+#search-icon {
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2;
+    position: relative;
+}
+
+/* Form tìm kiếm ẩn mặc định */
+#search-form {
+    margin-top: 50px;
+    position: absolute;
+    top: 120px; /* nằm ngay dưới icon */
+    left: 0;
+    display: none; /* ẩn mặc định */
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 1;
+    min-width: 220px;
+}
+
+/* Khi active thì hiện */
+#search-form.active {
+    display: block;
+}
+
+/* Input tìm kiếm */
+#search-form input[type="text"] {
+    width: calc(100% - 60px);
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Nút tìm */
+#search-form button {
+    padding: 6px 10px;
+    margin-left: 5px;
+    border: none;
+    background-color: #eb689f;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    #search-form {
+    display: none;
+    /* hoặc visibility: hidden; */
+    }
+
+    #search-form.active {
+    display: block;
+    /* Hoặc kiểu hiển thị phù hợp */
+    }
+      
+
+</style>
+<body>
+    <!-- header section starts -->
+<header>
+    <a href="{% url 'index' %}" class = "logo"><i class ="fas-fa-untensils"></i>ROMAND</a>
+    <nav class="navbar">
+        <a  href="{% url 'index' %}">Trang chủ</a>
+        <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+        <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        <!-- <a href="combo.html">Combo</a> -->
+       
+        <a href="{% url 'lienhe' %}">Liên hệ</a>
+        <a href="{% url 'index' %}#review">Phản hồi</a>
+        <a href="{% url 'qa' %}">Q&A</a>
+       
+
+        
+    </nav>
+<div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Giỏ Hàng</h5>
+                    <span class="close">&times;</span>
+                </div>
+                <!-- modal -->
+                <div class="modal-body">
+                    <div class="cart-row">
+                        <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                        <span class="cart-price cart-header cart-column">Giá</span>
+                        <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                    </div>
+                    <div class="cart-items">
+                        <div class="cart-total">
+                            <strong class="cart-total-title">Tổng Cộng:</strong>
+                            <span class="cart-total-price">0 $</span>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                        <button type="button" class="btn btn-primary order"> <a href="{% url 'thanhtoan' %}">Thanh Toán</a></button>
+                    </div>
+                </div>
+            </div>
+</div>
+    <div class="icons">
+        <i class="fas fa-bars" id="menu-bars"></i>
+        <div class="search-container">
+            <i class="fas fa-search" id="search-icon" onclick="toggleSearchBar()"></i>
+            <form method="GET" action="{% url 'tim_kiem_san_pham' %}" id="search-form">
+                <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." required>
+                <button type="submit">Tìm</button>
+            </form>
+        </div> 
+        <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+        <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="fas fa-user"></a>
+        {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+        {% endif %}
+
+    </div>
+        
+    
+
+</header>
+
+
+
+    <!-- header section ends -->
+    <!-- search form -->
+    <form action="" id="search-form">
+        <input type="search" placeholder="Tìm kiếm ở đây..." name="" id="">
+        <label for="search-box" class="fas fa-search"></label>
+        <i class="fas fa-times" id="close"></i>
+    </form>
+
+    <!-- home section starts  -->
+    <section class="home" id="home">
+        <div class="swiper home-slider">
+
+            <div class="swiper-wrapper wrapper">
+                <div class="swiper-slide slide">
+                    <div class="content">
+                        <span>Sản phẩm đặc biệt của chúng tôi</span>
+                        <h3>Son JL 23 Nucadamia (Mood Nude) – Son Romand Juicy Lasting Tint
+                        </h3>
+                        <p>Son Romand Juicy Lasting Tint 23 Nucadamia (Mood Nude) là tông màu đỏ nâu nude đầy mê hoặc trong bộ sưu tập Juicy Lasting Tint của Romand. Đây chính là sắc son dành riêng cho những cô gái yêu phong cách trang điểm tiết chế, nhẹ nhàng nhưng vẫn toát lên vẻ rạng rỡ, cuốn hút. 
+
+
+                        </p>
+                        
+                    </div>
+                    <div class="image">
+                        <img src="{% static 'customers/img/romand23.jpg' %}" alt="">
+                    </div>
+                </div>
+                <div class="swiper-slide slide">
+                    <div class="content">
+                        <span>Sản phẩm đặc biệt của chúng tôi</span>
+                        <h3>GW 04 Đỏ Đất – Son Romand Glasting Water Tint</h3>
+                        <p>Romand Glasting Water Tint 04 Vintage Ocean là thỏi son hoàn hảo dành cho những cô nàng yêu thích vẻ đẹp cổ điển, kiêu sa và bí ẩn. Sắc màu trầm ấm, chất son mượt mà, độ bền màu ấn tượng cùng thiết kế thanh lịch, trẻ trung sẽ khiến bạn say mê ngay từ lần đầu tiên sử dụng. </p>
+                        
+                    </div>
+                    <div class="image">
+                        <img src="{% static 'customers/img/romand04.jpg' %}" alt="">
+                    </div>
+                </div>
+                <div class="swiper-slide slide">
+                    <div class="content">
+                        <span>Sản phẩm đặc biệt của chúng tôi</span>
+                        <h3>ZV 01 Melting – Son Romand Zero Velvet Tint</h3>
+                        <p>Trong BST Romand Zero Velvet Tint mới đây, version 01 Melting cam san hô luôn trở thành tâm điểm khiến ai nấy đều “tan chảy”. Sắc son này không chỉ toát lên vẻ đẹp xinh xắn mà kết cấu xin tint cũng độc đáo, sang – xịn – mịn.
+                        </p>
+                        
+                    </div>
+                    <div class="image">
+                        <img src="{% static 'customers/img/zero01.jpg' %}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <!-- home section ends  -->
+
+    <!-- section SẢN PHẨM menu start-->
+   
+    <section class="sanpham" id="sanpham">
+
+        <h3 class="sub-heading"> Sản phẩm</h3>
+        <h1 class="heading">Glow up cùng Romand</h1>
+
+        <div class="box-container">
+            <!-- SON -->
+            <div class="box">
+                <div class="images" >
+                    <img class="img-prd" src="{% static 'customers/img/romand23.jpg' %}" alt="">
+                    
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">SON TINT BÓNG</h3>
+                    <p>Son JL 23 Nucadamia (Mood Nude)</p>
+                    
+                    <span class="price">279.000</span>
+                </div>
+            </div>
+            <!-- SON -->
+            <div class="box">
+                <div class="images">
+                    <img class="img-prd" src="{% static 'customers/img/romand04.jpg' %}" alt="">
+                   
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">SON TINT BÓNG</h3>
+                    <p>Romand Glasting Water Tint 04 Vintage Ocean</p>
+                    
+                    <span class="price">279.000</span>
+                </div>
+            </div>
+            <!-- BẢNG MẮT -->
+            <div class="box">
+                <div class="images" >
+                    <img class="img-prd" src="{% static 'customers/img/bangmat1.webp' %}" alt="">
+                    
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">BẢNG MẮT</h3>
+                    <p>Bảng phấn mắt Romand Better Than Palette</p>
+                    
+                    <span class="price">300.000</span>
+                </div>
+            </div>
+            <!-- CHÌ KẺ VIỀN MÔI -->
+            <div class="box">
+                <div class="images" >
+                    <img class="img-prd" src= "{% static 'customers/img/chikemoi03.png' %}" alt="">
+                    
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">CHÌ KẺ VIỀN MÔI</h3>
+                    <p>Chì Kẻ Viền Môi Romand 03 Kaya Beige</p>
+                    
+                    <span class="price">350.000</span>
+                </div>
+            </div>
+            <!--  -->
+            <div class="box">
+                <div class="images" >
+                    <img class="img-prd" src="{% static 'customers/img/chikemoi04.png' %}" alt="">
+                   
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">CHÌ KẺ VIỀN MÔI</h3>
+                    <p>Chì Kẻ Viền Môi Romand 04 Fig Breeze</p>
+                    
+                    <span class="price">350.000</span>
+                </div>
+            </div>
+            <!--  -->
+            <div class="box">
+                <div class="images" >
+                    <img class="img-prd" src="{% static 'customers/img/chikemoi05.png' %}" alt="">
+                    
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">CHÌ KẺ VIỀN MÔI</h3>
+                    <p>Chì kẻ viền môi Romand 05 Taupey Shade</p>
+                    
+                    <span class="price">350.000</span>
+                </div>
+            </div>
+
+            <!--SON-->
+            <div class="box">
+                <div class="images" >
+                    <img class="img-prd" src="{% static 'customers/img/zero03.png' %}"alt="">
+                    
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">SON ZERO VELVET TINT</h3>
+                    <p>DW 03 If Rose – Son Romand Dewyful Water Tint</p>
+                    
+                    <span class="price">289.000</span>
+                </div>
+            </div>
+            <!-- sp2 liptint-->
+            <div class="box">
+                <div class="images" >
+                    <img class="img-prd" src="{% static 'customers/img/zero12.png' %}" alt="">
+                    
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">SON ZERO VELVET TINT</h3>
+                    <p>DW 12 Canyon – Son Romand Dewyful Water Tint</p>
+                    
+                    <span class="price">289.000</span>
+                </div>
+            </div>
+            <!-- sp3 liptint-->
+            <div class="box">
+                <div class="images" >
+                    <img class="img-prd" src="{% static 'customers/img/zero01.jpg' %}" alt="">
+                    
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">SON ZERO VELVET TINT</h3>
+                    <p>ZV 01 Melting – Son Romand Zero Velvet Tint</p>
+                    
+                    <span class="price">279.000</span>
+                </div>
+            </div>
+
+            
+            <!-- end -->
+        </div>
+
+    </section>
+    <!-- section SẢN PHẨM end -->
+
+
+    <!-- Phần phản hồi khách hàng -->
+    <section class="review" id="review">
+        <h3 class="sub-heading">Ý kiến được ghi lại vào buổi ra mắt web nhà phân phối Romand</h3>
+        <h1 class="heading">Beauty Blogger nói gì?</h1>
+
+        <div class="swiper-container review-slider">
+
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide slide">
+                    <i class="fas fa-quote-right"></i>
+                    <div class="user">
+                        <img src="{% static 'customers/img/bo.jpg' %}" alt="">
+                        <div class="user-info">
+                            <h3>Jenny Kim</h3>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Da của Jenny đẹp hơn nhiều luôn. Cảm ơn team RomandVN. hi vọng team càng ngày càng phát triển
+                        và có thêm nhiều sản phẩm</p>
+                </div>
+
+                <div class="swiper-slide slide">
+                    <i class="fas fa-quote-right"></i>
+                    <div class="user">
+                        <img src="{% static 'customers/img/cho.jpg' %}" alt="">
+                        <div class="user-info">
+                            <h3>Hà Linh</h3>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Son dưỡng môi đỉnh nhất từ trước đến giờ, ước gì tôi biết đến romand sớm hơn. à màu cũng siêu đẹp
+                        và trendy luôn á. thích màu 23 nhất</p>
+                </div>
+
+                <div class="swiper-slide slide">
+                    <i class="fas fa-quote-right"></i>
+                    <div class="user">
+                        <img src="{% static 'customers/img/ho.jpg' %}" alt="">
+                        <div class="user-info">
+                            <h3>Bạch Lưu Dương</h3>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>as a beauty vlogger,the peptide is great. toast lip smell so good. but, shipping is quite late.
+                        though, i will buy them again. thanks hayley </p>
+                </div>
+
+                <div class="swiper-slide slide">
+                    <i class="fas fa-quote-right"></i>
+                    <div class="user">
+                        <img src="{% static 'customers/img/lon.jpg' %}" alt="">
+                        <div class="user-info">
+                            <h3>Mèo sao hỏa</h3>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Mua combo của Romand là điều đúng đắn nhất Mèo làm từ trước đến giờ, chúc cho shop
+                        càng ngày càng ra nhiều sản phẩm tuyệt vời.</p>
+                </div>
+
+                <div class="swiper-slide slide">
+                    <i class="fas fa-quote-right"></i>
+                    <div class="user">
+                        <img src="{% static 'customers/img/meo.jpg' %}" alt="">
+                        <div class="user-info">
+                            <h3>Lisa</h3>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>i love RomandVN, i love romand 23. this is the best cleanser i have used. My lips is better. i will buy
+                        others product of rhode. again, thank you</p>
+                </div>
+
+
+                
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <section class="footer">
+
+        <div class="box-container">
+
+            <div class="box">
+                <h3>Các cơ sở</h3>
+                <a href="#">Đống Đa, Hà Nội</a>
+                <a href="#">Hà Đông, Hà Nội</a>
+                <a href="#">Phủ Lý, Hà Nam</a>
+                <a href="#">Tiên Lãng, Hải Phòng</a>
+                <a href="#">Quận 1, Hồ Chí Minh</a>
+            </div>
+
+            <div class="box">
+                <h3>Các mục</h3>
+                <a href="{% url 'index' %}">Trang chủ</a>
+                <a href="{% url 'sanpham' %}">Sản phẩm</a>
+                <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+                <a href="{% url 'lienhe' %}">Liên hệ</a>
+                <a href="{% url 'index' %}#review">Phản hồi</a>
+                <a href="{% url 'qa' %}">Q&A</a>
+            </div>
+
+            <div class="box">
+                <h3>Thông tin liên lạc</h3>
+                <a href="#">+124-456-7890</a>
+                <a href="#">+111-222-3333</a>
+                <a href="#">romand@gmail.com</a>
+            </div>
+
+            <div class="box">
+                <h3>Theo dõi chúng tôi</h3>
+                <a href="https://www.facebook.com/romandyou.vn"><i class="fab fa-facebook-f"></i> Facebook</a>
+                <a href="https://www.instagram.com/romand_vn/"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+
+        </div>
+
+        <div class="credit"> copyright @ 2024 by <span>nhóm 4 thiếu nữ</span></div>
+
+    </section>
+
+    <!--  footer section ends -->
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- custom js file link -->
+    <script src="{% static 'customers/js/script.js' %}"></script>
+<script>
+window.onclick = function(event) {
+    const form = document.querySelector('#search-form');
+    const icon = document.querySelector('#search-icon');
+
+    if (!form.contains(event.target) && event.target !== icon) {
+        form.classList.remove('active');
+    }
+}
+</script>
+</body>
+
+
+</html>

@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nhà phân phối ROMAND</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/login.css' %}">
+</head>
+<body>
+    {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% if register_error %}
+  <div style="color:red; font-weight:bold; margin-bottom: 10px;">
+    ⚠ {{ register_error }}
+  </div>
+{% endif %}
+{% if register_success %}
+  <div style="color:green; font-weight:bold; margin-bottom: 10px;">
+    ✅ {{ register_success }}
+  </div>
+{% endif %}
+
+
+<!-- login Tam -->
+   <h2>ĐĂNG NHẬP HOẶC ĐĂNG KÍ</h2>
+    <div class="container" id="container">
+        <!-- Đăng kí -->
+        <div class="form-container sign-up-container">
+            <form id="register-form" method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+                <h1>Tạo tài khoản</h1>
+                {% if register_error %}
+                <p style="color:red">{{ register_error }}</p>
+                {% endif %}
+                {% if register_success %}
+                    <p style="color:green">{{ register_success }}</p>
+                {% endif %}
+
+                <input type="text" name="name" placeholder="Tên " required/>
+                <input type="email" name="email" placeholder="Email" required/>
+                <input type="password" name="password" placeholder="Mật khẩu" required/>
+                <input type="text" name="phone" placeholder="Số điện thoại" required/>
+                <input type="text" name="address" placeholder="Địa chỉ" required/>                
+                <button type="submit">Đăng kí</button>
+            </form>
+        </div>
+
+        <!-- Đăng nhập -->
+<div class="form-container sign-in-container">
+    <form method="POST" action="{% url 'login' %}{% if next %}?next={{ next }}{% endif %}">
+        {% csrf_token %}
+        <h1>Đăng nhập</h1>
+
+        {% if error %}
+          <p style="color:red; font-weight: bold;">{{ error }}</p>
+        {% endif %}
+                <input type="text" name="username" placeholder="Email" required/>
+                <input type="password" name="password" placeholder="Mật khẩu" required/>
+                <button type="submit">Đăng nhập</button>
+            </form>
+        </div>
+
+        <!-- Chuyển đổi giao diện -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Xin chào!</h1>
+                    <p>Để kết nối với ROMAND, hãy đăng nhập</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Xin chào!</h1>
+                    <p>Thêm thông tin cá nhân và bắt đầu trải nghiệm với ROMAND</p>
+                    <button class="ghost" id="signUp">Đăng kí</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signIn').addEventListener('click', () => {
+            document.getElementById('container').classList.remove('right-panel-active');
+        });
+
+        document.getElementById('signUp').addEventListener('click', () => {
+            document.getElementById('container').classList.add('right-panel-active');
+        });
+    </script>
+
+</html>

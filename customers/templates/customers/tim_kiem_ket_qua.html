@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}"> </head>
+<style>
+         .search-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Icon tìm kiếm */
+#search-icon {
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2;
+    position: relative;
+}
+
+/* Form tìm kiếm ẩn mặc định */
+#search-form {
+    margin-top: 2px;
+    position: absolute;
+    top: 40px; /* nằm ngay dưới icon */
+    left: 0;
+    display: none; /* ẩn mặc định */
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 1;
+    min-width: 220px;
+}
+
+/* Khi active thì hiện */
+#search-form.active {
+    display: block;
+}
+
+/* Input tìm kiếm */
+#search-form input[type="text"] {
+    width: calc(100% - 60px);
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Nút tìm */
+#search-form button {
+    padding: 6px 10px;
+    margin-left: 5px;
+    border: none;
+    background-color: #eb689f;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    #search-form {
+    display: none;
+    /* hoặc visibility: hidden; */
+    }
+
+    #search-form.active {
+    display: block;
+    /* Hoặc kiểu hiển thị phù hợp */
+    }
+
+</style>
+<body>
+    <!-- header section starts -->
+<header>
+    <a href="{% url 'index' %}" class = "logo"><i class ="fas-fa-untensils"></i>ROMAND</a>
+    <nav class="navbar">
+        <a  href="{% url 'index' %}">Trang chủ</a>
+        <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+        <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        <!-- <a href="combo.html">Combo</a> -->
+       
+        <a href="{% url 'lienhe' %}">Liên hệ</a>
+        <a href="{% url 'index' %}#review">Phản hồi</a>
+        <a href="{% url 'qa' %}">Q&A</a>
+       
+
+        
+    </nav>
+<div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Giỏ Hàng</h5>
+                    <span class="close">&times;</span>
+                </div>
+                <!-- modal -->
+                <div class="modal-body">
+                    <div class="cart-row">
+                        <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                        <span class="cart-price cart-header cart-column">Giá</span>
+                        <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                    </div>
+                    <div class="cart-items">
+                        <div class="cart-total">
+                            <strong class="cart-total-title">Tổng Cộng:</strong>
+                            <span class="cart-total-price">0 $</span>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                        <button type="button" class="btn btn-primary order"> <a href="{% url 'thanhtoan' %}">Thanh Toán</a></button>
+                    </div>
+                </div>
+            </div>
+</div>
+    <div class="icons">
+        <i class="fas fa-bars" id="menu-bars"></i>
+        <div class="search-container">
+            <i class="fas fa-search" id="search-icon" onclick="toggleSearchBar()"></i>
+            <form method="GET" action="{% url 'tim_kiem_san_pham' %}" id="search-form">
+                <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." required>
+                <button type="submit">Tìm</button>
+            </form>
+        </div>        <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+        <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="fas fa-user"></a>
+        {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+        {% endif %}
+
+    </div>
+</header>
+<br><br><br><br><br><BR><br><br><br>
+    {% block content %}
+
+    <h2 style="text-align: center; " >Kết quả tìm kiếm cho: "{{ tu_khoa }}"</h2>
+
+    {% if khong_tim_thay %}
+        <p style="color: red; text-align: center; font-size:20px">Sản phẩm này không tồn tại.</p>
+    {% elif danh_sach_ket_qua %}
+        <div class="box-container">
+            {% for sp in danh_sach_ket_qua %}
+            <div class="box">
+                <a href="{% url 'chitiet_sanpham' sp.ma_sp %}">
+                    <div class="image">
+                        {% if sp.hinh_anh %}
+                            <img src="{{ sp.hinh_anh.url }}" alt="{{ sp.ten_san_pham }}">
+                        {% else %}
+                            <img src="{% static 'img/no-image.png' %}" alt="Không có ảnh">
+                        {% endif %}
+                    </div>
+                    <div class="content">
+                        <h3>{{ sp.ten_san_pham }}</h3>
+                        <div class="price">{{ sp.gia|floatformat:0 }} VNĐ</div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Trường hợp không có kết quả và khong_tim_thay cũng false -->
+        <p>Không có kết quả tìm kiếm.</p>
+    {% endif %}
+
+    {% endblock %}
+<script>
+        function toggleSearchBar() {
+        const form = document.getElementById('search-form');
+        form.style.display = form.style.display === 'none' ? 'inline-block' : 'none';
+    }
+</script>
+</body>

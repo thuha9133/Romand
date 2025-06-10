@@ -1,0 +1,27 @@
+{% extends "quantri/base.html" %}
+{% block content %}
+<a href="{% url 'trang_chu' %}" style="display:inline-block; margin-bottom:20px; color:#3498db; font-weight:bold;">← Quay về Trang Chủ</a>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Thống Kê Tồn Kho</h2>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Mã SP</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá bán</th>
+                <th>Số lượng tồn</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sp in danh_sach_sp %}
+            <tr>
+                <td>{{ sp.ma_sp }}</td>
+                <td>{{ sp.ten_san_pham }}</td>
+                <td>{{ sp.gia|floatformat:0 }} đ</td>
+                <td>{{ sp.so_luong_con_lai }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

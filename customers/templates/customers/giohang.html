@@ -1,0 +1,304 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}"> </head>
+<style> 
+    header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 1000;
+}
+
+/* Thêm khoảng trống phía trên cho nội dung chính */
+main, .cart-container {
+    margin-top: 45px; /* Lớn hơn 1 chút để tránh dính */
+}
+.product-item {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fff;
+    margin: 15px auto;
+    padding: 15px;
+    display: flex;
+    gap: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 1000px;
+    align-items: center;
+}
+
+/* Ảnh sản phẩm */
+.product-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Thông tin sản phẩm */
+.product-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.product-info h4 {
+    font-size: 1.6rem;
+    color: #192a56;
+}
+
+.product-info p {
+    font-size: 1.4rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Nút xoá */
+.btn-remove {
+    background-color:rgb(44, 26, 34);
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-remove:hover {
+    background-color:rgb(231, 83, 140);
+}
+
+/* Nút thanh toán */
+.btn-pay {
+    padding: 10px 24px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin: 20px auto;
+    display: block;
+}
+
+.btn-pay:hover {
+    background-color: #219150;
+}
+        .back-link {
+            font-size: 20px;
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color:rgb(43, 22, 29);
+            font-weight: bold;}
+        h1 {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            color:rgb(43, 18, 26);}
+</style>
+<body>
+    <!-- header section starts -->
+<header>
+    <a href="{% url 'index' %}" class = "logo"><i class ="fas-fa-untensils"></i>ROMAND</a>
+    <nav class="navbar">
+        <a  href="{% url 'index' %}">Trang chủ</a>
+        <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+        <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        <!-- <a href="combo.html">Combo</a> -->
+       
+        <a href="{% url 'lienhe' %}">Liên hệ</a>
+        <a href="{% url 'index' %}#review">Phản hồi</a>
+        <a href="{% url 'qa' %}">Q&A</a>
+       
+
+        
+    </nav>
+<div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Giỏ Hàng</h5>
+                    <span class="close">&times;</span>
+                </div>
+                <!-- modal -->
+                <div class="modal-body">
+                    <div class="cart-row">
+                        <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                        <span class="cart-price cart-header cart-column">Giá</span>
+                        <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                    </div>
+                    <div class="cart-items">
+                        <div class="cart-total">
+                            <strong class="cart-total-title">Tổng Cộng:</strong>
+                            <span class="cart-total-price">0 $</span>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                        <button type="button" class="btn btn-primary order"> <a href="{% url 'thanhtoan' %}">Thanh Toán</a></button>
+                    </div>
+                </div>
+            </div>
+</div>
+    <div class="icons">
+        <i class="fas fa-bars" id="menu-bars"></i>
+        <i class="fas fa-search" id="search-icon"></i>
+        <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+        <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="fas fa-user"></a>
+        {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+        {% endif %}
+        
+    
+
+</header>
+<main>
+<section>
+    <br><br>
+<h1>Giỏ Hàng Của Bạn</h1>
+<div class="cart-container" id="cart-container">
+    <!-- Sản phẩm trong giỏ sẽ hiển thị ở đây -->
+</div>
+
+<div id="total-section" style="text-align: center; font-size: 22px; margin-top: 20px;">
+    Tổng tiền: <span id="total-price">0</span> VNĐ
+</div>
+
+<div style="text-align:center; margin-top: 20px;">
+<button onclick="redirectToCheckout()" class="btn-pay">Thanh toán</button>
+    <br>
+    <a href="{% url 'index' %}" class="back-link">&larr; Quay lại trang chủ</a>
+</div>
+
+<script>
+    function getCart() {
+        const cart = localStorage.getItem('cart');
+        return cart ? JSON.parse(cart) : [];
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function removeFromCart(id) {
+        let cart = getCart();
+        cart = cart.filter(item => item.id !== id);
+        saveCart(cart);
+        renderCart();
+    }
+
+    function updateQuantity(id, delta) {
+        let cart = getCart();
+        cart = cart.map(item => {
+            if (item.id === id) {
+                item.quantity += delta;
+                if (item.quantity < 1) item.quantity = 1;
+            }
+            return item;
+        });
+        saveCart(cart);
+        renderCart();
+    }
+
+    function calculateTotal(cart) {
+        return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    }
+
+    function renderCart() {
+        const container = document.getElementById('cart-container');
+        const totalPriceElem = document.getElementById('total-price');
+        const cart = getCart();
+
+        if (cart.length === 0) {
+            container.innerHTML = '<p class="empty-msg" style=" text-align: center; font-size: 15px">Giỏ hàng của bạn đang trống.</p>';
+            totalPriceElem.innerText = '0';
+            return;
+        }
+
+        container.innerHTML = '';
+        cart.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'product-item';
+            div.innerHTML = `
+                <img src="${item.img}" alt="${item.name}">
+                <div class="product-info">
+                    <h2>${item.name}</h2>
+                    <div>Giá: ${item.price} VNĐ</div>
+                    <div>
+                        Số lượng: 
+                        <button onclick="updateQuantity('${item.id}', -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateQuantity('${item.id}', 1)">+</button>
+                    </div>
+                    <div>Thành tiền: ${item.price * item.quantity} VNĐ</div>
+                </div>
+                <button class="btn-remove" onclick="removeFromCart('${item.id}')">Xóa</button>
+            `;
+            container.appendChild(div);
+        });
+
+        totalPriceElem.innerText = calculateTotal(cart);
+    }
+    function redirectToCheckout() {
+    const cart = getCart();
+    localStorage.setItem('cart_checkout', JSON.stringify(cart)); // lưu tạm để chuyển sang trang mới
+    window.location.href = 'thanhtoan/';
+}
+
+    function checkout() {
+        const cart = getCart();
+        const ma_kh = prompt("Nhập mã khách hàng:"); // tạm thời nhập tay
+
+        if (!ma_kh) {
+            alert("Bạn cần nhập mã khách hàng để thanh toán.");
+            return;
+        }
+
+        fetch('/thanhtoan/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                cart: cart,
+                ma_kh: ma_kh
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                alert('Đặt hàng thành công! Mã đơn hàng: ' + data.ma_dh);
+                localStorage.removeItem('cart');
+                renderCart();
+            } else {
+                alert('Lỗi: ' + data.message);
+            }
+        })
+        .catch(err => {
+            alert('Lỗi hệ thống khi gửi thanh toán.');
+            console.error(err);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+</section>
+</main>
+</body>

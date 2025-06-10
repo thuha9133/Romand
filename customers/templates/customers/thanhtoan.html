@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi Tiết Thanh Toán</title>
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .billing-form, .order-summary {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 15px 0 5px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .order-summary table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-summary th, .order-summary td {
+            padding: 8px 0;
+            text-align: left;
+        }
+
+        .order-summary tr:not(:last-child) {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+        }
+
+        .btn-order {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #60c341;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-order:hover {
+            background-color: #4caf32;
+        }
+    </style>
+</head>
+<body>
+    <h2>Chi Tiết Hóa Đơn</h2>
+    <div class="container">
+        <!-- BÊN TRÁI: FORM THÔNG TIN KHÁCH -->
+        <div class="billing-form">
+            <label>Họ và tên *</label>
+            <input type="text" id="ho_ten" placeholder="Họ tên người nhận" required>
+
+            <label>Địa chỉ *</label>
+            <input type="text" id="dia_chi" placeholder="Địa chỉ nhận hàng" required>
+
+            <label>Số điện thoại *</label>
+            <input type="text" id="dien_thoai" placeholder="Số điện thoại" required>
+
+            <label>Địa chỉ Email</label>
+            <input type="email" id="email" placeholder="Email liên hệ">
+
+            <label>Ghi chú đơn hàng</label>
+            <textarea id="ghi_chu" rows="3" placeholder="Điền ghi chú đơn hàng (nếu có)"></textarea>
+        </div>
+
+        <!-- BÊN PHẢI: ĐƠN HÀNG -->
+        <div class="order-summary">
+            <h3>Đơn Hàng Của Bạn</h3>
+            <div id="order-content"></div>
+
+            <label>Hình thức thanh toán</label>
+            <select id="hinh_thuc">
+                <option value="cod">Thanh toán khi nhận hàng</option>
+                <option value="bank">Chuyển khoản ngân hàng</option>
+            </select>
+
+            <button class="btn-order" onclick="submitOrder()">ĐẶT HÀNG</button>
+        </div>
+    </div>
+
+    <script>
+        const cart = JSON.parse(localStorage.getItem('cart_checkout') || '[]');
+
+        function formatCurrency(n) {
+            return n.toLocaleString('vi-VN') + ' VND';
+        }
+
+        function renderOrder() {
+            const container = document.getElementById('order-content');
+            if (!cart.length) {
+                container.innerHTML = "<p>Không có sản phẩm trong đơn hàng.</p>";
+                return;
+            }
+
+            let html = `<table><thead><tr><th>Sản Phẩm</th><th style="text-align:right">Tổng</th></tr></thead><tbody>`;
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                const totalItem = item.price * item.quantity;
+                subtotal += totalItem;
+                html += `<tr><td>${item.name} x ${item.quantity}</td><td style="text-align:right">${formatCurrency(totalItem)}</td></tr>`;
+            });
+
+            const shipping = 35000;
+            const total = subtotal + shipping;
+
+            html += `
+                <tr><td>Phí Giao Hàng</td><td style="text-align:right">${formatCurrency(shipping)}</td></tr>
+                <tr class="total"><td>Tổng Cộng</td><td style="text-align:right">${formatCurrency(total)}</td></tr>
+                </tbody></table>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function submitOrder() {
+            const ho_ten = document.getElementById("ho_ten").value.trim();
+            const dia_chi = document.getElementById("dia_chi").value.trim();
+            const dien_thoai = document.getElementById("dien_thoai").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const ghi_chu = document.getElementById("ghi_chu").value.trim();
+            const hinh_thuc = document.getElementById("hinh_thuc").value;
+
+            if (!ho_ten || !dia_chi || !dien_thoai) {
+                alert("Vui lòng nhập đầy đủ thông tin bắt buộc.");
+                return;
+            }
+         // const ma_kh = localStorage.getItem('ma_kh');  đảm bảo bạn đã lưu mã này khi người dùng đăng nhập
+
+            fetch('/customers/giohang/thanhtoan/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+
+                body: JSON.stringify({
+                    cart: cart,
+                    ho_ten,
+                    dia_chi,
+                    dien_thoai,
+                    email,
+                    ghi_chu,
+                    hinh_thuc,
+               })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    alert('Đặt hàng thành công! Mã đơn hàng: ' + data.ma_dh);
+                    localStorage.removeItem('cart');
+                    localStorage.removeItem('cart_checkout');
+                    window.location.href = '/customers/lich-su-don-hang/'; // hoặc điều hướng đến trang cảm ơn
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(err => {
+                alert("Lỗi gửi đơn hàng.");
+                console.error(err);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderOrder);
+    </script>
+</body>
+</html>

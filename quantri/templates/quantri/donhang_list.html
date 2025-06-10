@@ -1,0 +1,157 @@
+{% extends "quantri/base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách đơn hàng</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0 20px 60px;
+        }
+
+        h1 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            border-left: 5px solid #3498db;
+            padding-left: 10px;
+            margin-top: 40px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #1d6fa5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .actions a {
+            margin-right: 10px;
+            color: #e67e22;
+        }
+
+        .actions a:last-child {
+            color: #e74c3c;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        ul li {
+            list-style-type: disc;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'trang_chu' %}" style="display:inline-block; margin-bottom:20px; color:#3498db; font-weight:bold;">← Quay về Trang Chủ</a>
+
+    <h1>DANH SÁCH ĐƠN HÀNG</h1>
+
+    <h2>Đơn hàng</h2>
+<table>
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Mã đơn hàng</th>
+            <th>Mã khách hàng</th>
+            <th>Khách hàng</th>
+            <th>Ngày đặt</th>
+            <th>Ghi chú</th>
+            <th>Sản phẩm đã đặt</th>
+            <th>Tổng tiền</th>
+            <th>Phương thức thanh toán</th>
+            <th>Trạng thái</th>
+            <th>Xem chi tiết</th>
+            <th>Xóa</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dh in don_hang_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ dh.ma_dh }}</td>
+            <td>{{ dh.khach_hang.ma_kh }}</td>
+            <td>{{ dh.khach_hang.ten_kh }}</td>
+            <td>{{ dh.ngay_dat|date:"d/m/Y H:i" }}</td>
+            <td>{{ dh.ghi_chu }}</td>
+
+            <td>
+                <ul>
+                    {% for ct in dh.chi_tiet.all %}
+                        <li>{{ ct.san_pham.ten_san_pham }} (SL: {{ ct.so_luong }})</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>{{ dh.tong_tien }}</td>
+            <td>{{ dh.phuong_thuc }}</td>
+            <td>
+            <form method="post" action="{% url 'cap_nhat_trang_thai' dh.ma_dh %}">
+                {% csrf_token %}
+                <select name="trang_thai">
+                    <option value="cho_xu_ly" {% if dh.trang_thai == 'cho_xu_ly' %}selected{% endif %}>Chờ xử lý</option>
+                    <option value="dang_giao" {% if dh.trang_thai == 'dang_giao' %}selected{% endif %}>Đang giao</option>
+                    <option value="da_giao" {% if dh.trang_thai == 'da_giao' %}selected{% endif %}>Đã giao</option>
+                    <option value="da_bi_xoa" {% if dh.trang_thai == 'da_bi_xoa' %}selected{% endif %}>Đã xóa</option>
+
+                </select>
+                <button type="submit">Cập nhật</button>
+            </form>
+            </td>
+               <td>                         <a href="{% url 'ct_don_hang' dh.ma_dh %}" class="btn-detail">
+                                <i class="fas fa-eye"></i> Xem </td>
+            <td class="actions">
+                
+                <a href="{% url 'xoa_donhang' dh.ma_dh %}" onclick="return confirm('Xóa đơn hàng này?')">Xóa</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="9">Không có đơn hàng nào</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

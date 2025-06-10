@@ -1,0 +1,444 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}" />
+    <style>
+     .search-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Icon tìm kiếm */
+#search-icon {
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2;
+    position: relative;
+}
+
+/* Form tìm kiếm ẩn mặc định */
+#search-form {
+    margin-top: 2px;
+    position: absolute;
+    top: 40px; /* nằm ngay dưới icon */
+    left: 0;
+    display: none; /* ẩn mặc định */
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 1;
+    min-width: 220px;
+}
+
+/* Khi active thì hiện */
+#search-form.active {
+    display: block;
+}
+
+/* Input tìm kiếm */
+#search-form input[type="text"] {
+    width: calc(100% - 60px);
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Nút tìm */
+#search-form button {
+    padding: 6px 10px;
+    margin-left: 5px;
+    border: none;
+    background-color: #eb689f;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    #search-form {
+    display: none;
+    /* hoặc visibility: hidden; */
+    }
+
+    #search-form.active {
+    display: block;
+    /* Hoặc kiểu hiển thị phù hợp */
+    }
+
+  
+        /* ... giữ nguyên phần style của bạn ... */
+        .products .box-container {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .products .box {
+            background: #fff;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            text-align: center;
+        }
+        .products .box:hover {
+            transform: scale(1.02);
+        }
+        .products .box img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .products .content {
+            padding: 1rem;
+        }
+        .products .price {
+            font-size: 1.5rem;
+            color: #e91e63;
+            margin: 0.5rem 0;
+        }
+        .products .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background:rgb(54, 54, 53);
+            color: white;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .products .btn:hover {
+            background: #c2185b;
+        }
+        /* Thêm style cho modal nếu cần */
+        .modal {
+            display: none;
+            position: fixed; 
+            z-index: 100;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 700px;
+        }
+        .modal-header, .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .cart-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .cart-column {
+            flex: 1;
+        }
+        .cart-item-image {
+            max-width: 80px;
+        }
+        .cart-quantity-input {
+            width: 50px;
+        }
+        .btn-danger {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .cart-total {
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+        .btn-like {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background:rgb(247, 170, 195);
+            color: white;
+            border-radius: 5px;
+            margin-left: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-like:hover {
+            background:rgb(241, 140, 181);
+        }
+        /* Toast notification style */
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            margin-left: -100px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+        #toast.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @-webkit-keyframes fadein {
+            from {bottom: 0; opacity: 0;} 
+            to {bottom: 30px; opacity: 1;}
+        }
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+        @-webkit-keyframes fadeout {
+            from {bottom: 30px; opacity: 1;} 
+            to {bottom: 0; opacity: 0;}
+        }
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="{% url 'index' %}" class="logo"> ROMAND</a>
+    <nav class="navbar">
+        <a href="{% url 'index' %}">Trang chủ</a>
+        <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+        <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        <a href="{% url 'lienhe' %}">Liên hệ</a>
+        <a href="{% url 'index' %}#review">Phản hồi</a>
+        <a href="{% url 'qa' %}">Q&A</a>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Giỏ Hàng</h5>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="cart-row">
+                        <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                        <span class="cart-price cart-header cart-column">Giá</span>
+                        <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                    </div>
+                    <div class="cart-items">
+                        <!-- Tạo vùng chứa danh sách sản phẩm -->
+                        <div class="cart-items-list"></div>
+
+                        <div class="cart-total">
+                            <strong class="cart-total-title">Tổng Cộng:</strong>
+                            <span class="cart-total-price">0 VNĐ</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                        <button id="btn-checkout" class="btn btn-primary"><a href="{% url 'thanhtoan' %}" class="btn btn-primary">Thanh toán</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="icons">
+        <i class="fas fa-bars" id="menu-bars"></i>
+        <div class="search-container">
+            <i class="fas fa-search" id="search-icon" onclick="toggleSearchBar()"></i>
+            <form method="GET" action="{% url 'tim_kiem_san_pham' %}" id="search-form">
+                <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." required>
+                <button type="submit">Tìm</button>
+            </form>
+        </div> 
+        <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+        <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="fas fa-user"></a>
+        {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+        {% endif %}
+
+    </div>
+</header>
+
+<section class="products" id="products">
+    <h1 class="heading"> Sản phẩm <span>mới nhất</span> </h1>
+    <div class="box-container">
+        {% for sp in danh_sach_san_pham %}
+        <div class="box" data-product-id="{{ sp.ma_sp }}">
+            <a href="{% url 'chitiet_sanpham' sp.ma_sp %}"> 
+                <div class="image">
+                    {% if sp.hinh_anh %}
+                        <img class="img-prd" src="{{ sp.hinh_anh.url }}" alt="{{ sp.ten_san_pham }}">
+                    {% else %}
+                        <img class="img-prd" src="{% static 'img/no-image.png' %}" alt="Không có ảnh">
+                    {% endif %}
+                </div>
+                <div class="content">
+                    <h3 class="content-product-h3">{{ sp.ten_san_pham }}</h3>
+                    <div class="price">{{ sp.gia|floatformat:0 }} VNĐ</div>
+                </div>
+            </a>
+            
+        </div>
+
+        {% endfor %}
+    </div>
+</section>
+
+<div id="toast">Đã thêm vào mục yêu thích</div>
+
+<section class="footer">
+
+    <div class="box-container">
+
+        <div class="box">
+            <h3>Các cơ sở</h3>
+            <a href="#">Đống Đa, Hà Nội</a>
+            <a href="#">Hà Đông, Hà Nội</a>
+            <a href="#">Phủ Lý, Hà Nam</a>
+            <a href="#">Tiên Lãng, Hải Phòng</a>
+            <a href="#">Quận 1, Hồ Chí Minh</a>
+        </div>
+
+        <div class="box">
+            <h3>Các mục</h3>
+            <a href="{% url 'index' %}">Trang chủ</a>
+            <a href="{% url 'sanpham' %}">Sản phẩm</a>
+            <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+            <a href="{% url 'lienhe' %}">Liên hệ</a>
+            <a href="{% url 'index' %}#review">Phản hồi</a>
+            <a href="{% url 'qa' %}">Q&A</a>
+        </div>
+
+        <div class="box">
+            <h3>Thông tin liên lạc</h3>
+            <a href="#">+124-456-7890</a>
+            <a href="#">+111-222-3333</a>
+            <a href="#">romand@gmail.com</a>
+        </div>
+
+        <div class="box">
+            <h3>Theo dõi chúng tôi</h3>
+            <a href="https://www.facebook.com/romandyou.vn"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="https://www.instagram.com/romand_vn/"><i class="fab fa-instagram"></i> Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="credit"> copyright @ 2024 by <span>nhóm 4 thiếu nữ</span></div>
+
+</section>
+<script>
+    function toggleSearchBar() {
+        const form = document.getElementById('search-form');
+        form.style.display = form.style.display === 'none' ? 'inline-block' : 'none';
+    }
+    // Hiển thị modal khi click vào icon giỏ hàng
+    const cartIcon = document.getElementById("cart");
+    const modal = document.getElementById("myModal");
+    const closeModalBtns = document.querySelectorAll(".close, .close-footer");
+
+    cartIcon.addEventListener("click", () => {
+        renderCart();
+        modal.style.display = "block";
+    });
+
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+    });
+
+    function renderCart() {
+        const cartItemsContainer = document.querySelector(".cart-items-list");
+        cartItemsContainer.innerHTML = "";
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let total = 0;
+
+        cart.forEach(item => {
+            const itemDiv = document.createElement("div");
+            itemDiv.classList.add("cart-row");
+
+            itemDiv.innerHTML = `
+                <div class="cart-item cart-column">
+                    <img class="cart-item-image" src="${item.img}" width="100" height="100" alt="">
+                    <span class="cart-item-title">${item.name}</span>
+                </div>
+                <span class="cart-price cart-column">${item.price} VNĐ</span>
+                <div class="cart-quantity cart-column">
+                    <input class="cart-quantity-input" type="number" value="${item.quantity}">
+                    <button class="btn btn-danger" type="button">Xóa</button>
+                </div>
+            `;
+
+            // Xử lý xóa sản phẩm
+            itemDiv.querySelector(".btn-danger").addEventListener("click", () => {
+                removeItemFromCart(item.id);
+                renderCart();
+            });
+
+            // Xử lý thay đổi số lượng
+            itemDiv.querySelector(".cart-quantity-input").addEventListener("change", (event) => {
+                let quantity = parseInt(event.target.value);
+                if (isNaN(quantity) || quantity <= 0) {
+                    quantity = 1;
+                    event.target.value = 1;
+                }
+                updateItemQuantity(item.id, quantity);
+                renderCart();
+            });
+
+            total += item.price * item.quantity;
+            cartItemsContainer.appendChild(itemDiv);
+        });
+
+        document.querySelector(".cart-total-price").innerText = total.toLocaleString("vi-VN") + "VNĐ";
+    }
+
+    function removeItemFromCart(id) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart = cart.filter(item => item.id !== id);
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function updateItemQuantity(id, newQuantity) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const index = cart.findIndex(item => item.id === id);
+        if (index > -1) {
+            cart[index].quantity = newQuantity;
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+    }
+</script>
+
+</body>
+</html>

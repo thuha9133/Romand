@@ -1,0 +1,419 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}" />
+    <style>
+        /* ... giữ nguyên phần style của bạn ... */
+        .products .box-container {
+            margin-top: 70px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .products .box {
+            background: #fff;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            text-align: center;
+        }
+        .products .box:hover {
+            transform: scale(1.02);
+        }
+        .products .box img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .products .content {
+            padding: 1rem;
+        }
+        .products .price {
+            font-size: 1.5rem;
+            color: #e91e63;
+            margin: 0.5rem 0;
+        }
+        .products .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #e91e63;
+            color: white;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .products .btn:hover {
+            background: #c2185b;
+        }
+        /* Thêm style cho modal nếu cần */
+        .modal {
+            display: none;
+            position: fixed; 
+            z-index: 100;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 700px;
+        }
+        .modal-header, .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .cart-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .cart-column {
+            flex: 1;
+        }
+        .cart-item-image {
+            max-width: 80px;
+        }
+        .cart-quantity-input {
+            width: 50px;
+        }
+        .btn-danger {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .cart-total {
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+        .btn-like {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #ff4081;
+            color: white;
+            border-radius: 5px;
+            margin-left: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-like:hover {
+            background: #c2185b;
+        }
+        /* Toast notification style */
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            margin-left: -100px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+        #toast.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @-webkit-keyframes fadein {
+            from {bottom: 0; opacity: 0;} 
+            to {bottom: 30px; opacity: 1;}
+        }
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+        @-webkit-keyframes fadeout {
+            from {bottom: 30px; opacity: 1;} 
+            to {bottom: 0; opacity: 0;}
+        }
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+        body {
+        background: linear-gradient(to right, #e0f7fa, #e1bee7);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        font-size: 18px; /* tăng size font toàn cục */
+        line-height: 1.6;
+    }
+
+    .profile-card {
+        max-width: 600px;
+        margin: 60px auto;
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        text-align: center;
+        padding: 40px 30px;
+    }
+
+    .profile-card h2 {
+        font-size: 32px;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .profile-card p {
+        font-size: 20px;
+        margin: 15px 0;
+        color: #555;
+    }
+
+    .profile-card i {
+        margin-right: 10px;
+        color: #007bff;
+    }
+
+    .profile-card .btn-group {
+        margin-top: 30px;
+    }
+
+    .profile-card .btn {
+        font-size: 18px;
+        padding: 12px 25px;
+        border-radius: 10px;
+    }
+    body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+}
+
+.container {
+    margin-top:40px;
+    display: flex;
+    max-width: 1000px;
+    margin: 50px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);           /* tạo flex container */
+  align-items: flex-start;   /* căn đầu hàng theo chiều dọc */
+  gap: 20px; 
+}
+
+.sidebar {
+  width: 250px;              /* ví dụ chiều ngang cố định */
+  /* chiều cao sẽ tự động theo nội dung */
+  background-color: #f5f5f5;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 15px 20px;
+    color: #000;
+    border-bottom: 1px solid #ccc;
+}
+
+.sidebar li.active,
+.sidebar li:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.sidebar a {
+    color: #000;
+    text-decoration: none;
+}
+
+.main {
+    flex: 1;
+
+      padding: 15px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+h2, h3 {
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+
+.btn-black {
+    background-color: #111;
+    color: #fff;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-black:hover {
+    background-color: #333;
+}
+.form-group {
+    border: 1.5px solid #ccc;   /* viền khung */
+    border-radius: 8px;          /* bo góc */
+    padding: 15px 20px;          /* khoảng cách bên trong ô */
+    margin-bottom: 20px;         /* khoảng cách giữa các ô */
+    background-color: #fafafa;   /* nền nhẹ để nổi bật */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* bóng nhẹ */
+}
+
+.form-group.profile-info label {
+    font-weight: 700;
+    color: #333;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.form-group.profile-info p {
+    margin: 0;
+    font-size: 17px;
+    color: #555;
+}
+
+
+
+    </style>
+</head>
+
+<header>
+    <a href="{% url 'index' %}" class="logo"> ROMAND</a>
+    <nav class="navbar">
+        <a href="{% url 'index' %}">Trang chủ</a>
+        <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+        <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        <a href="{% url 'lienhe' %}">Liên hệ</a>
+        <a href="{% url 'index' %}#review">Phản hồi</a>
+        <a href="{% url 'qa' %}">Q&A</a>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Giỏ Hàng</h5>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="cart-row">
+                        <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                        <span class="cart-price cart-header cart-column">Giá</span>
+                        <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                    </div>
+                    <div class="cart-items">
+                        <!-- Tạo vùng chứa danh sách sản phẩm -->
+                        <div class="cart-items-list"></div>
+
+                        <div class="cart-total">
+                            <strong class="cart-total-title">Tổng Cộng:</strong>
+                            <span class="cart-total-price">0 ₫</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                        <button id="btn-checkout" class="btn btn-primary"><a href="{% url 'thanhtoan' %}" class="btn btn-primary">Thanh toán</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="icons">
+        <i class="fas fa-bars" id="menu-bars"></i>
+        <i class="fas fa-search" id="search-icon"></i>
+        <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+        <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+    <a href="{% url 'edit_profile' %}" >
+    <i class="fas fa-user-edit"></i></a>
+
+    </div>
+</header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <br><br>
+<div class="container">
+    <div class="sidebar">
+        <ul>
+            <li class="active"><i class="fas fa-user"></i> Thông tin tài khoản</li>
+            <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+            <li>
+            <a href="{% url 'lich_su_don_hang' %}">
+                <i class="fas fa-history"></i> Lịch sử đặt hàng
+            </a>
+            </li>
+            </a>
+            </li>
+
+        </ul>
+    </div>
+
+    <div class="main">
+        <h2 style='text-align: center'>Thông tin tài khoản</h2>
+<br>
+    <div class="form-group profile-info">
+        <p>Username: {{ user.first_name }} {{ user.last_name }}</p></div>
+    <div class="form-group profile-info">
+        <p>Email: {{ user.email }}</p></div>
+    <div class="form-group profile-info">
+        <p>Địa chỉ: {{ customer.address }}</p></div>
+    <div class="form-group profile-info">
+        <p>Số điện thoại: {{ customer.phone }}</p>
+
+</div>
+
+
+
+
+</body>
+
+</html>
+

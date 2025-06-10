@@ -1,0 +1,125 @@
+{% extends "quantri/base.html" %}
+
+{% block content %}
+<div class="icons" style="margin-bottom: 20px; display: flex; gap: 15px;">
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'logout_staff' %}" 
+       class="btn btn-danger btn-lg d-flex align-items-center" 
+       title="Đăng xuất"
+       style="font-weight: 600; padding: 10px 20px; border-radius: 8px;">
+      <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+    </a>
+  {% else %}
+    <a href="{% url 'login_staff' %}?next={{ request.path }}" 
+       class="btn btn-primary btn-lg d-flex align-items-center" 
+       title="Đăng nhập"
+       style="font-weight: 600; padding: 10px 20px; border-radius: 8px;">
+      <i class="fas fa-user-plus me-2"></i> Đăng nhập
+    </a>
+  {% endif %}
+
+</div>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Quản Lí Cửa Hàng</h2>
+    <p class="text-center text-muted">Danh Sách Quản Lí</p>
+
+    <!-- Phân Mục Khách Hàng -->
+    <h4 class="mt-5">Phân Mục Khách Hàng</h4>
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5>Khách Hàng</h5>
+                    <a href="{% url 'khachhang_list' %}" class="btn btn-light btn-sm mt-2">Chi Tiết</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phân Mục Bán Hàng -->
+    <h4 class="mt-4">Phân Mục Bán Hàng</h4>
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-secondary text-white">
+                <div class="card-body">
+                    <h5>Đơn hàng</h5>
+                    <a href="{% url 'donhang_list' %}" class="btn btn-light btn-sm mt-2">Chi Tiết</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Phân Mục Sản Phẩm -->
+    <h4 class="mt-4">Phân Mục Sản Phẩm</h4>
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5>Sản Phẩm</h5>
+                    <a href="{% url 'sanpham_list' %}" class="btn btn-light btn-sm mt-2">Chi Tiết</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5>Loại Sản Phẩm</h5>
+                    <a href="{% url 'loaihang_list' %}" class="btn btn-light btn-sm mt-2">Chi Tiết</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Phân Mục Khác -->
+    <h4 class="mt-4">Phân Mục Admin</h4>
+    <div class="row">
+    
+        <div class="col-md-3 mb-3">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <h5>Tài khoản</h5>
+                    <a href="{% url 'taikhoan_list' %}" class="btn btn-light btn-sm mt-2">Chi Tiết</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phân Mục Thống Kê -->
+    <h4 class="mt-4">Thống Kê</h4>
+    <div class="row">
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5><i class="fas fa-chart-line me-2"></i>Doanh Thu</h5>
+                    <a href="{% url 'thongke_doanhthu' %}" class="btn btn-light btn-sm mt-2">Chi Tiết</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5><i class="fas fa-fire me-2"></i>Sản Phẩm Bán Chạy</h5>
+                    <a href="{% url 'thongke_sanphambanchay' %}" class="btn btn-light btn-sm mt-2">Chi Tiết</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5><i class="fas fa-boxes me-2"></i>Tồn Kho Sản Phẩm</h5>
+                    <a href="{% url 'thongke_tonkho' %}" class="btn btn-light btn-sm mt-2">Chi Tiết</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

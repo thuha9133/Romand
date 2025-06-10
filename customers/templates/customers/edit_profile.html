@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thông tin tài khoản</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fff;
+      padding: 60px 20px;
+      margin: 0;
+    }
+
+    .edit-container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 40px 30px;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: #111;
+    }
+
+    form p {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      color: #111;
+      margin-bottom: 6px;
+      display: block;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border-color: #999;
+      background: #fff;
+      outline: none;
+    }
+
+    .btn-black {
+      background-color: #000;
+      color: #fff;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s ease;
+    }
+
+    .btn-black:hover {
+      background-color: #333;
+    }
+
+    .section {
+      margin-top: 40px;
+    }
+  </style>
+</head>
+  
+    <header>
+        <a href="{% url 'index' %}" class="logo"><i class="fas-fa-untensils"></i>ROMAND</a>
+        <nav class="navbar">
+            <a href="{% url 'index' %}">Trang chủ</a>
+            <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+            <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        
+            <a href="{% url 'lienhe' %}">Liên hệ</a>
+            <a href="{% url 'index' %}#review">Phản hồi</a>
+            <a href="{% url 'qa' %}">Q&A</a>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Giỏ Hàng</h5>
+                        <span class="close">&times;</span>
+                    </div>
+                    <!-- modal -->
+                    <div class="modal-body">
+                        <div class="cart-row">
+                            <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                            <span class="cart-price cart-header cart-column">Giá</span>
+                            <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                        </div>
+                        <div class="cart-items">
+                            <div class="cart-total">
+                                <strong class="cart-total-title">Tổng Cộng:</strong>
+                                <span class="cart-total-price">0 $</span>
+                            </div>
+                        </div>
+    
+    
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                            <button type="button" class="btn btn-primary order">Thanh Toán</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="icons">
+            <i class="fas fa-bars" id="menu-bars"></i>
+            <i class="fas fa-search" id="search-icon"></i>
+            <i id="cart" class="fas fa-shopping-cart"></i>
+            <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="fas fa-user"></a>
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+            {% endif %}
+
+        </div>
+    
+    </header>
+<body>
+<div class="edit-container">
+  <form method="POST">
+    {% if messages %}
+  <ul style="color: red;">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% for field in user_form %}
+  {% for error in field.errors %}
+    <p style="color: red;">Lỗi {{ field.label }}: {{ error }}</p>
+  {% endfor %}
+{% endfor %}
+{% for field in customer_form %}
+  {% for error in field.errors %}
+    <p style="color: red;">Lỗi {{ field.label }}: {{ error }}</p>
+  {% endfor %}
+{% endfor %}
+
+    {% csrf_token %}
+    
+    <div class="section">
+      <h2 style='text-align: center'>Thông tin tài khoản</h2>
+
+
+
+
+
+
+{{ customer_form.address.label_tag }}
+{{ customer_form.address }}
+
+{{ customer_form.phone.label_tag }}
+{{ customer_form.phone }}
+
+    
+<br><br>
+      <button type="submit" name="update_info" class="btn-black">Thay đổi thông tin</button>
+    </div>
+
+    <div class="section">
+      <h2 style='text-align: center'>Đổi mật khẩu</h2>
+
+      <p><input type="password" name="current_password" placeholder="Mật khẩu hiện tại" ></p>
+      <p><input type="password" name="new_password" placeholder="Mật khẩu mới"></p>
+      <p><input type="password" name="confirm_password" placeholder="Xác nhận mật khẩu mới"></p>
+
+      <button type="submit" name="change_password" class="btn-black">Lưu thay đổi</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

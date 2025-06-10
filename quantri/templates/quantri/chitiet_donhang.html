@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}"> </head>
+
+<body>
+    <!-- header section starts -->
+
+
+
+    <!-- header section ends -->
+    <!-- search form -->
+
+<style>.order-detail {
+    padding: 80px 20px;
+    background-color: #fdfdfd;
+}
+
+.detail-title {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.order-info {
+    margin-bottom: 30px;
+    background-color: #ecf0f1;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.detail-table th,
+.detail-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+    text-align: left;
+}
+
+.detail-table thead {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 10px 18px;
+    background-color: #95a5a6;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-back:hover {
+    background-color: #7f8c8d;
+}
+</style>
+<body>
+    
+</body>
+</html>
+{% block content %}
+<section class="order-detail">
+    <div class="container">
+        <h2 class="detail-title">
+            <i class="fas fa-file-invoice"></i> Chi tiết đơn hàng {{ don_hang.ma_dh }}
+        </h2>
+
+        <table class="detail-table">
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Ngày đặt</th>
+                    <th>Phương thức thanh toán</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ct in chi_tiets %}
+                <tr>
+                    <td>{{ ct.san_pham.ten_san_pham }}</td>
+                    <td>{{ ct.so_luong }}</td>
+                    <td>{{ ct.san_pham.gia|floatformat:0 }} VNĐ</td>
+                    {% if forloop.first %}
+                        <td rowspan="{{ chi_tiets|length }}">{{ don_hang.ngay_dat|date:"d/m/Y" }}</td>
+                        <td rowspan="{{ chi_tiets|length }}">{{ don_hang.get_phuong_thuc_display }}</td>
+                        <td rowspan="{{ chi_tiets|length }}">{{ don_hang.tong_tien }}</td>
+                    {% endif %}
+                    
+                    <td>
+                        {% if don_hang.trang_thai == 'cho_xu_ly' %}
+                            <span style="color: pink; font-weight: bold;">Chờ xử lý</span>                    
+                        {% elif don_hang.trang_thai == 'dang_giao' %}
+                            <span style="color: orange; font-weight: bold;">Đang giao</span>
+                        {% elif don_hang.trang_thai == 'da_giao' %}
+                            <span style="color: green; font-weight: bold;">Đã giao</span>
+                        {% elif don_hang.trang_thai == 'da_bi_xoa' %}
+                            <span style="color: red; font-weight: bold;">Đã bị xóa</span>                            
+                        {% else %}
+                            <span style="color: blue;">Không xác định</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+        <a href="{% url 'donhang_list' %}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Quay lại lịch sử đơn hàng
+        </a>
+    </div>
+</section>
+{% endblock %}

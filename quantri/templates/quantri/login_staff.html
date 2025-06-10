@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quản trị</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/login.css' %}">
+</head>
+
+ {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% if register_error %}
+  <div style="color:red; font-weight:bold; margin-bottom: 10px;">
+    ⚠ {{ register_error }}
+  </div>
+{% endif %}
+{% if register_success %}
+  <div style="color:green; font-weight:bold; margin-bottom: 10px;">
+    ✅ {{ register_success }}
+  </div>
+{% endif %}
+<div style="display:flex; gap:50px;">
+  <!-- Đăng ký -->
+  <form method="POST" action="{% url 'register_staff' %}">
+    {% csrf_token %}
+    <h3>Đăng ký Staff</h3>
+    <input type="text" name="username" placeholder="Tên đăng nhập" required><br>
+    <input type="text" name="ho_ten" placeholder="Họ tên" required><br>
+    <input type="email" name="email" placeholder="Email" required><br>
+    <input type="password" name="password" placeholder="Mật khẩu" required><br>
+    <button type="submit">Đăng ký</button>
+  </form>
+
+  <!-- Đăng nhập -->
+  <form method="POST" action="{% url 'login_staff' %}">
+    {% csrf_token %}
+    <h3>Đăng nhập</h3>
+    <input type="email" name="email" placeholder="Email" required><br>
+    <input type="password" name="password" placeholder="Mật khẩu" required><br>
+    <button type="submit">Đăng nhập</button>
+  </form>
+</div>
+
+    <script>
+        document.getElementById('signIn').addEventListener('click', () => {
+            document.getElementById('container').classList.remove('right-panel-active');
+        });
+
+        document.getElementById('signUp').addEventListener('click', () => {
+            document.getElementById('container').classList.add('right-panel-active');
+        });
+    </script>
+
+</body>
+</html>

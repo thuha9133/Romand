@@ -1,0 +1,222 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}"> </head>
+
+<body>
+    <!-- header section starts -->
+<header>
+    <a href="{% url 'index' %}" class = "logo"><i class ="fas-fa-untensils"></i>ROMAND</a>
+    <nav class="navbar">
+        <a  href="{% url 'index' %}">Trang chủ</a>
+        <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+        <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        <!-- <a href="combo.html">Combo</a> -->
+       
+        <a href="{% url 'lienhe' %}">Liên hệ</a>
+        <a href="{% url 'index' %}#review">Phản hồi</a>
+        <a href="{% url 'qa' %}">Q&A</a>
+        
+
+        
+    </nav>
+<div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Giỏ Hàng</h5>
+                    <span class="close">&times;</span>
+                </div>
+                <!-- modal -->
+                <div class="modal-body">
+                    <div class="cart-row">
+                        <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                        <span class="cart-price cart-header cart-column">Giá</span>
+                        <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                    </div>
+                    <div class="cart-items">
+                        <div class="cart-total">
+                            <strong class="cart-total-title">Tổng Cộng:</strong>
+                            <span class="cart-total-price">0 $</span>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                        <button type="button" class="btn btn-primary order"> <a href="{% url 'thanhtoan' %}">Thanh Toán</a></button>
+                    </div>
+                </div>
+            </div>
+</div>
+    <div class="icons">
+        <i class="fas fa-bars" id="menu-bars"></i>
+        <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+        <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="fas fa-user"></a>
+        {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+        {% endif %}
+
+       
+    </div>
+        
+    
+
+</header>
+
+    <!-- header section ends -->
+    <!-- search form -->
+    <form action="" id="search-form">
+        <input type="search" placeholder="Tìm kiếm ở đây..." name="" id="search-box">
+        <label for="search-box" class="fas fa-search"></label>
+        <i class="fas fa-times" id="close"></i>
+    </form>
+
+ <div class="qa-section" id="qa">
+    <h2>Q&A</h2>
+    <div class="qa-container">
+        <div class="qa-item">
+            <div class="qa-question">
+                <h3>Rom&nd là thương hiệu của nước nào?</h3>
+                <span class="toggle-btn">+</span>
+            </div>
+            <div class="qa-answer">
+                <p>Rom&nd là thương hiệu mỹ phẩm nổi tiếng đến từ Hàn Quốc, được thành lập bởi chuyên gia trang điểm nổi tiếng Saerom Min (alias: Gaeko). Thương hiệu được biết đến với thiết kế hiện đại và màu sắc phù hợp xu hướng giới trẻ châu Á.</p>
+            </div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">
+                <h3>Rom&nd có phải là thương hiệu mỹ phẩm thuần chay không?</h3>
+                <span class="toggle-btn">+</span>
+            </div>
+            <div class="qa-answer">
+                <p>Một số dòng sản phẩm của Rom&nd là thuần chay và không thử nghiệm trên động vật. Tuy nhiên, không phải toàn bộ sản phẩm đều đạt chứng nhận thuần chay, nên bạn cần kiểm tra kỹ từng dòng cụ thể.</p>
+            </div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">
+                <h3>Giờ mở cửa của cửa hàng bạn là mấy giờ?</h3>
+                <span class="toggle-btn">+</span>
+            </div>
+            <div class="qa-answer">
+                <p>Cửa hàng của chúng tôi mở cửa từ 9 giờ sáng đến 9 giờ tối, từ Thứ Hai đến Thứ Bảy.
+                    Vào Chủ Nhật, chúng tôi mở cửa từ 10 giờ sáng đến 6 giờ chiều.</p>
+            </div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">
+                <h3>Bạn có cung cấp sản phẩm thân thiện với người ăn chay không?</h3>
+                <span class="toggle-btn">+</span>
+            </div>
+            <div class="qa-answer">
+                <p>Không, chúng tôi chỉ cung cấp sản phẩm mỹ phẩm chăm sóc da cho phái đẹp.</p>
+            </div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">
+                <h3>Làm thế nào tôi có thể đặt lịch tư vấn chăm sóc da?</h3>
+                <span class="toggle-btn">+</span>
+            </div>
+            <div class="qa-answer">
+                <p>Bạn có thể đặt lịch tư vấn chăm sóc da bằng cách đến cửa hàng của chúng tôi hoặc gọi cho chúng tôi theo số (123) 456-7890.
+                    Các chuyên gia của chúng tôi sẽ giúp bạn tìm ra sản phẩm tốt nhất cho loại da của bạn.</p>
+            </div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">
+                <h3>Rom&nd có an toàn cho da nhạy cảm không?</h3>
+                <span class="toggle-btn">+</span>
+            </div>
+            <div class="qa-answer">
+                <p> Hầu hết sản phẩm của Rom&nd được kiểm nghiệm da liễu, dịu nhẹ và phù hợp với nhiều loại da, kể cả da nhạy cảm. Tuy nhiên, nếu bạn có cơ địa dễ dị ứng, nên thử trước ở vùng da nhỏ.
+
+</p>
+            </div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">
+                <h3>Bạn có cung cấp dịch vụ gói quà không?</h3>
+                <span class="toggle-btn">+</span>
+            </div>
+            <div class="qa-answer">
+                <p>Có, chúng tôi cung cấp dịch vụ gói quà miễn phí cho tất cả các giao dịch mua.
+                    Chỉ cần cho chúng tôi biết khi thanh toán nếu bạn muốn các mặt hàng của mình được gói quà.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const qaItems = document.querySelectorAll('.qa-item');
+
+        qaItems.forEach(item => {
+            const question = item.querySelector('.qa-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+                const answer = item.querySelector('.qa-answer');
+                if (item.classList.contains('active')) {
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                } else {
+                    answer.style.maxHeight = '0';
+                }
+            });
+        });
+    });
+</script>
+
+
+<section class="footer">
+
+    <div class="box-container">
+
+        <div class="box">
+            <h3>Các cơ sở</h3>
+            <a href="#">Đống Đa, Hà Nội</a>
+            <a href="#">Hà Đông, Hà Nội</a>
+            <a href="#">Phủ Lý, Hà Nam</a>
+            <a href="#">Tiên Lãng, Hải Phòng</a>
+            <a href="#">Quận 1, Hồ Chí Minh</a>
+        </div>
+
+        <div class="box">
+            <h3>Các mục</h3>
+            <a href="{% url 'index' %}">Trang chủ</a>
+            <a href="{% url 'sanpham' %}">Sản phẩm</a>
+            <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+            <a href="{% url 'lienhe' %}">Liên hệ</a>
+            <a href="{% url 'index' %}#review">Phản hồi</a>
+            <a href="{% url 'qa' %}">Q&A</a>
+        </div>
+
+        <div class="box">
+            <h3>Thông tin liên lạc</h3>
+            <a href="#">+124-456-7890</a>
+            <a href="#">+111-222-3333</a>
+            <a href="#">romand@gmail.com</a>
+        </div>
+
+        <div class="box">
+            <h3>Theo dõi chúng tôi</h3>
+            <a href="https://www.facebook.com/romandyou.vn"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="https://www.instagram.com/romand_vn/"><i class="fab fa-instagram"></i> Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="credit"> copyright @ 2024 by <span>nhóm 4 thiếu nữ</span></div>
+
+</section>
+
+
+<!--  footer section ends -->

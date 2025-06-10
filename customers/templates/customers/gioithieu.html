@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Romand.vn</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROMAND</title>
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}"
+</head>
+<body>
+   
+    <header>
+        <a href="{% url 'index' %}" class="logo"><i class="fas-fa-untensils"></i>ROMAND</a>
+        <nav class="navbar">
+            <a href="{% url 'index' %}">Trang chủ</a>
+            <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+            <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        
+            <a href="{% url 'lienhe' %}">Liên hệ</a>
+            <a href="{% url 'index' %}#review">Phản hồi</a>
+            <a href="{% url 'qa' %}">Q&A</a>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Giỏ Hàng</h5>
+                        <span class="close">&times;</span>
+                    </div>
+                    <!-- modal -->
+                    <div class="modal-body">
+                        <div class="cart-row">
+                            <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                            <span class="cart-price cart-header cart-column">Giá</span>
+                            <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                        </div>
+                        <div class="cart-items">
+                            <div class="cart-total">
+                                <strong class="cart-total-title">Tổng Cộng:</strong>
+                                <span class="cart-total-price">0 $</span>
+                            </div>
+                        </div>
+    
+    
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                            <button type="button" class="btn btn-primary order">Thanh Toán</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="icons">
+            <i class="fas fa-bars" id="menu-bars"></i>
+            <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+            <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="fas fa-user"></a>
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+            {% endif %}
+
+        </div>
+    
+    </header>
+
+
+
+<form action = "" id="search-form">
+    <input type="search" placeholder="Tìm kiếm ở đây..." name ="" id="search-box">
+    <label for="search-box" class="fas fa-search"></label>
+    <i class="fas fa-times" id="close"></i>
+</form>
+
+<!-- Gioi thieu Manh -->
+<section class="about" id="Gioithieu">
+    <h3 class="sub-heading"> Về chúng tôi </h3>
+    <h1 class="heading"> VỀ ROMAND </h1> 
+    <div class="centered-image">
+        <img src="{% static 'customers/img/rm1.png' %}" alt="Ảnh giới thiệu 1" class="intro-image">
+    </div>
+    <div class="content">
+        <h3>Chào mừng bạn đến với Romand - điểm đến lý tưởng cho những ai đang tìm kiếm sự hoàn hảo trong việc làm đẹp.</h3>
+        <p>Romand là một thương hiệu mỹ phẩm đến từ Hàn Quốc với mong muốn mang đến cho khách hàng những giá trị tuyệt vời nhất qua từng sản phẩm. Ra mắt vào năm 2017 bởi nhà sáng lập Saerom Min – một nghệ sĩ trang điểm tài năng, Romand nhanh chóng chinh phục thị trường với triết lý “Đẹp theo cách của bạn”. Thương hiệu hướng đến những cô nàng năng động, yêu thích cái đẹp và không ngại thể hiện bản thân.
+
+            Còn chờ gì, hãy cùng viết nên câu chuyện sắc đẹp của riêng bạn cùng với Romand Việt Nam!
+            
+            
+        <br> - Son Dưỡng: Với công thức giàu dưỡng chất, son dưỡng từ Romand không chỉ giúp giữ cho đôi môi của bạn mềm mại và mịn màng mà còn cung cấp dưỡng chất cần thiết để nuôi dưỡng làn môi từ bên trong.
+        <br>
+        </p>
+    </div>
+    <div class="additional-content">
+        <div class="image">
+            <img src="{% static 'customers/img/rm.jpg' %}" alt="Ảnh giới thiệu 2" class="intro-image">
+        </div>
+        <p>Romand cam kết mang đến cho khách hàng những sản phẩm chất lượng nhất, được sản xuất từ các thành phần tự nhiên và an toàn cho da. Hãy đồng hành cùng chúng tôi trên hành trình chăm sóc và tôn vinh vẻ đẹp tự nhiên của bạn.</p>
+    </div>
+    <div class="icons-container">
+        <div class="icons" data-message="Miễn phí giao hàng">
+            <i class="fas fa-shipping-fast"></i>
+            <span>Miễn phí giao hàng</span>
+        </div>
+        <div class="icons" data-message="Thanh toán dễ dàng">
+            <i class="fas fa-dollar-sign"></i>
+            <span>Thanh toán dễ dàng</span>
+        </div>
+        <div class="icons" data-message="Phục vụ 24/7">
+            <i class="fas fa-headset"></i>
+            <span>Phục vụ 24/7</span>
+        </div>
+    </div>
+    <a href="{% url 'index' %}" class="btn">Quay lại</a>
+</section>
+
+
+    <section class="footer">
+
+        <div class="box-container">
+
+            <div class="box">
+                <h3>Các cơ sở</h3>
+                <a href="#">Đống Đa, Hà Nội</a>
+                <a href="#">Hà Đông, Hà Nội</a>
+                <a href="#">Phủ Lý, Hà Nam</a>
+                <a href="#">Tiên Lãng, Hải Phòng</a>
+                <a href="#">Quận 1, Hồ Chí Minh</a>
+            </div>
+
+            <div class="box">
+                <h3>Các mục</h3>
+                <a href="{% url 'index' %}">Trang chủ</a>
+                <a href="{% url 'sanpham' %}">Sản phẩm</a>
+                <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+                <a href="{% url 'lienhe' %}">Liên hệ</a>
+                <a href="{% url 'index' %}#review">Phản hồi</a>
+                <a href="{% url 'qa' %}">Q&A</a>
+            </div>
+
+            <div class="box">
+                <h3>Thông tin liên lạc</h3>
+                <a href="#">+124-456-7890</a>
+                <a href="#">+111-222-3333</a>
+                <a href="#">romand@gmail.com</a>
+            </div>
+
+            <div class="box">
+                <h3>Theo dõi chúng tôi</h3>
+                <a href="https://www.facebook.com/romandyou.vn"><i class="fab fa-facebook-f"></i> Facebook</a>
+                <a href="https://www.instagram.com/romand_vn/"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+
+        </div>
+
+        <div class="credit"> copyright @ 2024 by <span>nhóm 4 thiếu nữ</span></div>
+
+    </section>
+
+<!--  footer section ends -->
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<!-- custom js file link -->
+<script src="{% static 'customers/js/script.js' %}"></script>
+</body>
+</html>

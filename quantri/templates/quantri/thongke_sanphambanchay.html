@@ -1,0 +1,23 @@
+{% extends "quantri/base.html" %}
+{% block content %}
+<a href="{% url 'trang_chu' %}" style="display:inline-block; margin-bottom:20px; color:#3498db; font-weight:bold;">← Quay về Trang Chủ</a>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Top 5 Sản Phẩm Bán Chạy Nhất</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sản Phẩm</th>
+                <th>Tổng Số Lượng Bán</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in top_sanpham %}
+            <tr>
+                <td>{{ item.san_pham__ten_san_pham }}</td>
+                <td>{{ item.tong_sl }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

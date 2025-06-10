@@ -1,0 +1,136 @@
+{% extends "quantri/base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang quản trị</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0 20px 60px;
+        }
+
+        h1 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            border-left: 5px solid #3498db;
+            padding-left: 10px;
+            margin-top: 40px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #1d6fa5;
+        }
+
+        .btn-add {
+            display: inline-block;
+            margin: 10px 0;
+            background-color: #2ecc71;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+
+        .btn-add:hover {
+            background-color: #27ae60;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .actions a {
+            margin-right: 10px;
+            color: #e67e22;
+        }
+
+        .actions a:last-child {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'trang_chu' %}" style="display:inline-block; margin-bottom:20px; color:#3498db; font-weight:bold;">← Quay về Trang Chủ</a>
+    <h1>DANH SÁCH KHÁCH HÀNG</h1>
+
+
+    <!-- Khách hàng -->
+    <h2>Khách hàng</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Mã khách hàng</th>
+                <th>Tên khách</th>
+                <th>Email</th>
+                <th>Mật khẩu</th>
+                <th>SĐT</th>
+                <th>Địa chỉ</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for kh in khach_hang_list %}
+            <tr>
+                <td>{{ kh.ma_kh}}</td>
+                <td>{{ kh.ten_kh }}</td>
+                <td>{{ kh.email }}</td>
+                <td>{{ kh.mat_khau }}</td>
+                <td>{{ kh.so_dien_thoai }}</td>
+                <td>{{ kh.dia_chi }}</td>
+                <td class="actions">
+                    
+                    <a href="{% url 'xoa_khachhang' kh.ma_kh %}" onclick="return confirm('Xóa khách hàng này?')">Xóa</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">Không có khách hàng nào</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</body>
+</html>
+{% endblock %}

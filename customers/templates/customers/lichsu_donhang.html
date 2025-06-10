@@ -1,0 +1,210 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà phân phối ROMAND</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!--font awesome cdn link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{% static 'customers/css/style.css' %}"> </head>
+
+<body>
+    <!-- header section starts -->
+<header>
+    <a href="{% url 'index' %}" class = "logo"><i class ="fas-fa-untensils"></i>ROMAND</a>
+    <nav class="navbar">
+        <a  href="{% url 'index' %}">Trang chủ</a>
+        <a href="{% url 'gioithieu' %}">Giới thiệu</a>
+        <a href="{% url 'sanpham' %}">Sản phẩm</a>
+        <!-- <a href="combo.html">Combo</a> -->
+       
+        <a href="{% url 'lienhe' %}">Liên hệ</a>
+        <a href="{% url 'index' %}#review">Phản hồi</a>
+        <a href="{% url 'qa' %}">Q&A</a>
+       
+
+        
+    </nav>
+<div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Giỏ Hàng</h5>
+                    <span class="close">&times;</span>
+                </div>
+                <!-- modal -->
+                <div class="modal-body">
+                    <div class="cart-row">
+                        <span class="cart-item cart-header cart-column">Sản Phẩm</span>
+                        <span class="cart-price cart-header cart-column">Giá</span>
+                        <span class="cart-quantity cart-header cart-column">Số Lượng</span>
+                    </div>
+                    <div class="cart-items">
+                        <div class="cart-total">
+                            <strong class="cart-total-title">Tổng Cộng:</strong>
+                            <span class="cart-total-price">0 $</span>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close-footer">Đóng</button>
+                        <button type="button" class="btn btn-primary order"> <a href="{% url 'thanhtoan' %}">Thanh Toán</a></button>
+                    </div>
+                </div>
+            </div>
+</div>
+    <div class="icons">
+        <i class="fas fa-bars" id="menu-bars"></i>
+        <i class="fas fa-search" id="search-icon"></i>
+        <a href="{% url 'giohang' %}" class="fas fa-shopping-cart" title="Giỏ hàng"></a>
+        <a href="{% url 'yeuthich' %}" class="fas fa-heart"></a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="fas fa-user"></a>
+        {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="fas fa-user-plus"></a>
+        {% endif %}
+
+    </div>
+        
+    
+
+</header>
+
+
+
+    <!-- header section ends -->
+    <!-- search form -->
+    <form action="" id="search-form">
+        <input type="search" placeholder="Tìm kiếm ở đây..." name="" id="search-box">
+        <label for="search-box" class="fas fa-search"></label>
+        <i class="fas fa-times" id="close"></i>
+    </form>
+    <style>
+.order-history {
+    padding-top: 80px; /* đủ để không bị navbar che */
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 40px;
+    background-color: #f9f9f9;
+}
+
+.order-title {
+    font-size: 30px;         /* chữ vừa đủ dễ đọc */
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+
+.order-history .title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.order-table th, .order-table td {
+    font-size: 15px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    vertical-align: top;
+}
+
+.order-table thead {
+    background-color: #3498db;
+    color: white;
+}
+
+.product-list {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 0;
+}
+
+.btn-detail {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #2ecc71;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn-detail:hover {
+    background-color: #27ae60;
+}
+
+.no-orders {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 20px;
+}
+
+    </style>
+    {% block content %}
+    <section class="order-history">
+        <div class="container">
+            <h2 class="order-title">
+                <i class="fas fa-history"></i> Lịch sử đơn hàng
+            </h2>
+
+            {% if don_hangs %}
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã đơn</th>
+                        <th>Sản phẩm</th>
+                        <th>Ngày đặt</th>
+                        <th>Chi tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dh in don_hangs %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ dh.ma_dh }}</td>
+                        <td>
+                            <ul class="product-list">
+                                {% for ct in dh.chi_tiet.all %}
+                                    <li>{{ ct.san_pham.ten_san_pham }} (SL: {{ ct.so_luong }})</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ dh.ngay_dat|date:"d/m/Y " }}</td>
+                        <td>
+                            <a href="{% url 'chi_tiet_don_hang' dh.ma_dh %}" class="btn-detail">
+                                <i class="fas fa-eye"></i> Xem
+                            </a>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p class="no-orders">Bạn chưa có đơn hàng nào.</p>
+            {% endif %}
+        </div>
+    </section>
+    {% endblock %}
+</body>
+</html>
